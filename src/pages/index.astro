@@ -25,18 +25,18 @@ const latestPosts = posts
     <!-- 首页横幅 -->
     <section class="relative py-32 overflow-hidden">
       <!-- Background Image with Overlay -->
-      <div class="absolute inset-0">
+      <div class="absolute inset-0 w-full h-full">
         <img 
           src="/images/hero-background.webp" 
           alt="Background" 
-          class="w-full h-full object-cover z-0"
+          class="absolute inset-0 w-full h-full object-cover"
           loading="eager"
         />
-        <div class="absolute inset-0 bg-black bg-opacity-60 z-10"></div>
+        <div class="absolute inset-0 bg-black bg-opacity-60"></div>
       </div>
       
       <!-- Content -->
-      <div class="relative z-10 max-w-4xl mx-auto px-4 text-center">
+      <div class="relative z-20 max-w-4xl mx-auto px-4 text-center">
         <h1 class="text-5xl font-bold mb-6 text-white">
           欢迎来到我的博客 ✨
         </h1>
