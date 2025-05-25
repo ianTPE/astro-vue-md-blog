@@ -1,0 +1,49 @@
+---
+title: "MDX 示例页面"
+description: "展示如何在 MDX 中使用 Astro 和 Vue 组件"
+---
+
+import Layout from '../layouts/Layout.astro';
+import Welcome from '../components/Welcome.astro';
+import VueCounter from '../components/VueCounter.vue';
+
+<Layout>
+
+# 欢迎使用 MDX！
+
+这是一个 **MDX** 文件，您可以在其中混合使用 Markdown 和组件。
+
+## 使用 Astro 组件
+
+<Welcome />
+
+## 使用 Vue 组件
+
+<VueCounter title="交互式计数器" message="点击下面的按钮试试看！" />
+
+## 使用 Tailwind CSS 样式
+
+<div class="bg-blue-100 p-4 rounded-lg border border-blue-300">
+  <h3 class="text-blue-800 font-bold">信息框</h3>
+  <p class="text-blue-700">这个框使用了 Tailwind CSS 样式！</p>
+</div>
+
+## Markdown 功能
+
+您仍然可以使用所有标准的 Markdown 功能：
+
+- 列表项 1
+- 列表项 2
+- 列表项 3
+
+```javascript
+// 代码块也可以正常工作
+const message = "Hello from MDX!";
+console.log(message);
+```
+
+> 这是一个引用块
+
+**现在您可以在 `.md` 和 `.mdx` 文件中自由使用 Astro 组件和 Vue 组件了！**
+
+</Layout>
