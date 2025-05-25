@@ -1,0 +1,237 @@
+---
+title: "Astro + Vue.js 开发指南"
+description: "详细介绍如何在 Astro 项目中使用 Vue.js 组件，包括最佳实践和常见问题解决方案。"
+date: "2025-05-24"
+tags: ["Astro", "Vue.js", "教程", "前端"]
+author: "博主"
+image: "/images/astro-vue.jpg"
+---
+
+// import CodeBlock from '../../../../components/global/ui/CodeBlock.astro';  // 🌐 全局组件
+import Tabs from '../../../../components/global/ui/Tabs.vue';
+
+// 导入本文章专用的本地组件 (优先级高于全局组件)
+import CodeBlock from './components/CodeBlock.astro';              // 📍 文章级增强组件
+import CodeComparison from './components/CodeComparison.astro';
+import TechShowcase from './components/TechShowcase.vue';
+
+# Astro + Vue.js 开发指南
+
+在现代前端开发中，Astro 和 Vue.js 的结合为我们提供了强大的开发体验。
+
+<TechShowcase client:load />
+
+## 为什么选择 Astro + Vue.js？
+
+### Astro 的优势
+
+- 🚀 **零配置** - 开箱即用
+- ⚡ **性能优异** - 默认生成静态HTML
+- 🎯 **岛屿架构** - 按需加载JavaScript
+- 🔧 **灵活性** - 支持多种前端框架
+
+### Vue.js 的优势
+
+- 💚 **响应式** - 强大的响应式系统
+- 🔄 **组合式API** - 更好的逻辑复用
+- 📦 **生态丰富** - 庞大的社区和插件
+- 🎨 **开发体验** - 优秀的开发工具
+
+## 配置 Astro + Vue.js
+
+### 1. 安装依赖
+
+<CodeBlock language="bash" title="安装命令" theme="vs-code">
+npm install @astrojs/vue vue
+</CodeBlock>
+
+### 🎆 增强版 CodeBlock 组件演示
+
+在这篇文章中，我们使用的是 **文章级的增强版 CodeBlock 组件**，它具有以下特性：
+
+- ✨ 默认显示行号
+- 🎨 VS Code 风格主题
+- 📝 语言标签显示
+- 📋 增强复制功能
+- 🔍 悬停动画效果
+
+<CodeBlock language="javascript" title="Vue 组件示例" theme="vs-code">
+// 这是使用增强版 CodeBlock 的效果
+import { ref } from 'vue'
+
+export default {
+  setup() {
+    const count = ref(0)
+    
+    const increment = () => {
+      count.value++
+    }
+    
+    return {
+      count,
+      increment
+    }
+  }
+}
+</CodeBlock>
+
+### 2. 配置 astro.config.mjs
+
+<CodeComparison title="Astro 配置对比" beforeTitle="基础配置" afterTitle="添加 Vue 支持">
+  <div slot="before">
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({
+  // 基础配置
+});
+  </div>
+  <div slot="after">
+import { defineConfig } from 'astro/config';
+import vue from '@astrojs/vue';
+
+export default defineConfig({
+  integrations: [vue()],
+});
+  </div>
+</CodeComparison>
+
+### 3. 创建 Vue 组件
+
+<CodeBlock language="vue">
+<template>
+  <div class="counter">
+    <h3>{{ title }}</h3>
+    <p>当前计数: {{ count }}</p>
+    <button @click="increment">增加</button>
+    <button @click="decrement">减少</button>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+
+defineProps({
+  title: String
+})
+
+const count = ref(0)
+
+const increment = () => count.value++
+const decrement = () => count.value--
+</script>
+</CodeBlock>
+
+## 在 Astro 中使用 Vue 组件
+
+### 客户端指令
+
+Astro 提供了多种客户端指令来控制组件的加载时机：
+
+<Tabs>
+  <div slot="tab-1">client:load</div>
+  <div slot="tab-2">client:idle</div>
+  <div slot="tab-3">client:visible</div>
+  
+  <div slot="panel-1">
+    立即加载组件JavaScript，适用于重要的交互组件。
+    
+    ```astro
+    <Counter client:load title="立即加载" />
+    ```
+  </div>
+  
+  <div slot="panel-2">
+    浏览器空闲时加载，适用于非关键组件。
+    
+    ```astro
+    <Counter client:idle title="空闲时加载" />
+    ```
+  </div>
+  
+  <div slot="panel-3">
+    组件进入视口时加载，适用于页面下方的组件。
+    
+    ```astro
+    <Counter client:visible title="可见时加载" />
+    ```
+  </div>
+</Tabs>
+
+## 最佳实践
+
+### 1. 组件组织
+
+将组件按功能分类存放：
+
+```
+src/components/
+├── ui/           # 通用UI组件
+├── blog/         # 博客相关组件
+├── layout/       # 布局组件
+└── common/       # 公共组件
+```
+
+### 2. 性能优化
+
+- 使用适当的客户端指令
+- 避免不必要的客户端JavaScript
+- 利用Astro的静态生成优势
+
+### 3. 状态管理
+
+对于复杂的状态，考虑使用 Pinia：
+
+<CodeBlock language="javascript">
+// stores/counter.js
+import { defineStore } from 'pinia'
+
+export const useCounterStore = defineStore('counter', {
+  state: () => ({
+    count: 0
+  }),
+  actions: {
+    increment() {
+      this.count++
+    }
+  }
+})
+</CodeBlock>
+
+## 常见问题
+
+### Q: Vue 组件中的样式不生效？
+
+A: 确保在组件中使用 scoped 样式：
+
+```vue
+<style scoped>
+.my-component {
+  color: blue;
+}
+</style>
+```
+
+### Q: 如何在 Vue 组件中使用 Tailwind CSS？
+
+A: 直接在模板中使用 Tailwind 类名即可：
+
+```vue
+<template>
+  <div class="bg-blue-500 text-white p-4 rounded">
+    Hello Tailwind!
+  </div>
+</template>
+```
+
+## 总结
+
+Astro + Vue.js 的组合为我们提供了：
+
+- ✅ 优秀的开发体验
+- ✅ 出色的性能表现
+- ✅ 灵活的架构设计
+- ✅ 丰富的生态支持
+
+这使得它成为构建现代博客和文档站点的理想选择。
+
+下一篇文章，我们将深入探讨 Astro 的岛屿架构和性能优化技巧，敬请期待！

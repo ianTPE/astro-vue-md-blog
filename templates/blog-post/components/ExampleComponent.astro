@@ -1,0 +1,41 @@
+---
+// 示例本地组件 - 根据需要修改或删除
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title = "默认标题", description = "默认描述" } = Astro.props;
+---
+
+<div class="custom-component bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-6">
+  <div class="flex items-center space-x-3 mb-4">
+    <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+      <span class="text-white text-sm">💡</span>
+    </div>
+    <h3 class="text-lg font-semibold text-blue-900">{title}</h3>
+  </div>
+  
+  <p class="text-blue-700 text-sm mb-4">{description}</p>
+  
+  <div class="content">
+    <slot />
+  </div>
+</div>
+
+<style>
+  .custom-component {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

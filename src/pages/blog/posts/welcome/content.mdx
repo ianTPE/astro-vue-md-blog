@@ -1,0 +1,136 @@
+---
+title: "欢迎来到我的博客"
+description: "这是第一篇博客文章，介绍了这个博客的主要功能和特点。"
+date: "2025-05-25"
+tags: ["介绍", "博客", "Astro"]
+author: "博主"
+image: "/images/welcome.jpg"
+---
+
+import { VueCounter } from '../../../../components/global/common/VueCounter.vue';
+// import Alert from '../../../../components/global/ui/Alert.astro';  // 🌐 全局组件
+
+// 导入本文章专用的本地组件 (优先级高于全局组件)
+import Alert from './components/Alert.astro';                   // 📍 文章级组件
+import WelcomeFeatureCard from './components/WelcomeFeatureCard.astro';
+import WelcomeStats from './components/WelcomeStats.vue';
+
+# 欢迎来到我的博客！
+
+这是我的第一篇博客文章，很高兴您能来访问！
+
+## 关于这个博客
+
+这个博客使用了现代化的技术栈构建：
+
+- **Astro** - 静态站点生成器
+- **Vue.js** - 响应式组件
+- **Tailwind CSS** - 样式框架
+- **MDX** - 增强的 Markdown
+
+## 本博客的特色
+
+以下是这个博客的主要特色：
+
+<WelcomeFeatureCard>
+  <span slot="title">📝 MDX 支持</span>
+  可以在 Markdown 中直接使用 Astro 和 Vue 组件，实现丰富的内容交互。
+</WelcomeFeatureCard>
+
+<WelcomeFeatureCard>
+  <span slot="title">🧩 组件化</span>
+  采用模块化设计，每篇文章都可以有自己的本地组件，与全局组件完美结合。
+</WelcomeFeatureCard>
+
+<WelcomeFeatureCard>
+  <span slot="title">⚡ 高性能</span>
+  基于 Astro 的静态生成，实现极致的加载速度和 SEO 优化。
+</WelcomeFeatureCard>
+
+## 博客统计
+
+<WelcomeStats client:load />
+
+## 组件优先级演示
+
+这个博客系统实现了 **文章级组件优先于全局组件** 的机制：
+
+<Alert type="special" title="组件优先级演示">
+  这是文章级的 Alert 组件，它覆盖了全局的 Alert 组件！注意右上角的 "📍 Article-level" 标记和独特的渐变样式。
+</Alert>
+
+<Alert type="info" title="优先级规则">
+  **组件解析优先级：**
+  1. 📍 **Article-level**: `posts/{slug}/components/` (最高优先级)
+  2. 📝 **Page-level**: `components/local/blog/` (中等优先级) 
+  3. 🌐 **Global**: `components/global/ui/` (最低优先级)
+</Alert>
+
+<Alert type="success" title="实际效果">
+  如果您在其他文章中使用 Alert 组件，将会显示全局版本的样式。而在这篇 Welcome 文章中，使用的是定制版本！
+</Alert>
+
+## 组件展示
+
+### 1. 组件支持
+
+您可以在 Markdown 中直接使用 Vue 组件：
+
+<VueCounter title="计数器演示" message="这是一个在 MDX 中使用的 Vue 组件" />
+
+### 2. 样式组件
+
+还可以使用自定义的 Astro 组件：
+
+<Alert type="info" title="提示">
+这是一个信息提示框组件，使用了 Tailwind CSS 样式。
+</Alert>
+
+### 3. 代码高亮
+
+支持语法高亮的代码块：
+
+```javascript
+// 这是一个 JavaScript 示例
+function greet(name) {
+  console.log(`Hello, ${name}!`);
+}
+
+greet('World');
+```
+
+```css
+/* CSS 样式示例 */
+.button {
+  @apply bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600;
+}
+```
+
+## 博客目录结构
+
+这个博客的目录结构设计如下：
+
+```
+src/
+├── pages/
+│   ├── blog/
+│   │   ├── index.astro          # 博客列表页
+│   │   ├── [slug].astro         # 博客详情页
+│   │   └── posts/               # 博客文章
+│   └── components/              # 组件展示页
+├── components/
+│   ├── blog/                    # 博客相关组件
+│   ├── ui/                      # UI 组件
+│   ├── layout/                  # 布局组件
+│   └── common/                  # 通用组件
+└── layouts/                     # 页面布局
+```
+
+## 接下来的计划
+
+1. 添加更多的 UI 组件
+2. 完善博客功能
+3. 添加搜索功能
+4. 优化 SEO
+
+感谢您的阅读，期待与您分享更多精彩内容！

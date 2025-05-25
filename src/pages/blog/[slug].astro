@@ -1,0 +1,37 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BlogLayout from '../../components/global/layout/BlogLayout.astro';
+
+export async function getStaticPaths() {
+  // 获取所有文章目录
+  const posts = await Astro.glob('./posts/*/content.mdx');
+  
+  return posts.map((post) => {
+    // 从路径中提取 slug
+    const pathParts = post.file.split('/');
+    const slug = pathParts[pathParts.length - 2]; // 获取文件夹名作为 slug
+    
+    return {
+      params: { slug },
+      props: { post },
+    };
+  });
+}
+
+const { post } = Astro.props;
+const { Content } = post;
+const { title, description, date, tags, author, image } = post.frontmatter;
+---
+
+<Layout>
+  <BlogLayout 
+    title={title}
+    description={description}
+    date={date}
+    tags={tags}
+    author={author}
+    image={image}
+  >
+    <Content />
+  </BlogLayout>
+</Layout>

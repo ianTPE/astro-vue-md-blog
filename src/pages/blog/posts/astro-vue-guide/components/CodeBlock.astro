@@ -1,0 +1,153 @@
+---
+// Astro Vue Guide 文章专用的 CodeBlock 组件 - 增强版
+export interface Props {
+  language?: string;
+  title?: string;
+  showLineNumbers?: boolean;
+  theme?: 'dark' | 'light' | 'github' | 'vs-code';
+}
+
+const { 
+  language = 'text', 
+  title, 
+  showLineNumbers = true,  // 默认显示行号
+  theme = 'vs-code'        // 默认 VS Code 主题
+} = Astro.props;
+
+const themeClasses = {
+  'dark': 'bg-gray-900 text-gray-100',
+  'light': 'bg-gray-50 text-gray-900',
+  'github': 'bg-white text-gray-800 border border-gray-200',
+  'vs-code': 'bg-gray-800 text-gray-100'
+};
+---
+
+<div class={`enhanced-code-block ${themeClasses[theme]} rounded-lg overflow-hidden my-6 shadow-lg`}>
+  {title && (
+    <div class="code-header bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 text-white text-sm font-medium border-b flex items-center justify-between">
+      <span class="flex items-center">
+        <span class="mr-2">📝</span>
+        {title}
+      </span>
+      <span class="text-xs bg-white/20 px-2 py-1 rounded-full">
+        📍 Article-level Enhanced
+      </span>
+    </div>
+  )}
+  
+  <div class="relative">
+    <!-- 复制按钮 -->
+    <button 
+      class="copy-button absolute top-3 right-3 bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs transition-all duration-200 z-10 flex items-center space-x-1"
+      onclick="copyCodeEnhanced(this)"
+    >
+      <span class="copy-icon">📋</span>
+      <span class="copy-text">复制</span>
+    </button>
+    
+    <!-- 语言标签 -->
+    {language !== 'text' && (
+      <div class="absolute top-3 left-3 bg-yellow-500 text-black px-2 py-1 rounded text-xs font-mono z-10">
+        {language}
+      </div>
+    )}
+    
+    <pre class={`code-content p-4 overflow-x-auto text-sm ${showLineNumbers ? 'pl-12' : ''} relative`}>
+      {showLineNumbers && (
+        <div class="line-numbers absolute left-0 top-4 bottom-4 w-8 text-right text-gray-500 select-none user-select-none pointer-events-none">
+          <!-- 行号会通过 JavaScript 动态生成 -->
+        </div>
+      )}
+      <code class={`language-${language} block`}><slot /></code>
+    </pre>
+  </div>
+</div>
+
+<script>
+  function copyCodeEnhanced(button) {
+    const codeBlock = button.closest('.enhanced-code-block').querySelector('code');
+    const text = codeBlock.textContent;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      const icon = button.querySelector('.copy-icon');
+      const text = button.querySelector('.copy-text');
+      
+      // 更新按钮状态
+      icon.textContent = '✅';
+      text.textContent = '已复制!';
+      button.className = button.className.replace('bg-blue-600', 'bg-green-600');
+      
+      setTimeout(() => {
+        icon.textContent = '📋';
+        text.textContent = '复制';
+        button.className = button.className.replace('bg-green-600', 'bg-blue-600');
+      }, 2000);
+    });
+  }
+  
+  // 生成行号
+  function generateLineNumbers() {
+    document.querySelectorAll('.enhanced-code-block').forEach(block => {
+      const lineNumberDiv = block.querySelector('.line-numbers');
+      const codeElement = block.querySelector('code');
+      
+      if (lineNumberDiv && codeElement) {
+        const lines = codeElement.textContent.split('\n').length;
+        const lineNumbers = Array.from({length: lines}, (_, i) => i + 1).join('\n');
+        lineNumberDiv.textContent = lineNumbers;
+      }
+    });
+  }
+  
+  // 将函数添加到全局作用域
+  window.copyCodeEnhanced = copyCodeEnhanced;
+  
+  // 页面加载时生成行号
+  document.addEventListener('DOMContentLoaded', generateLineNumbers);
+</script>
+
+<style>
+  .enhanced-code-block {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+    transition: all 0.3s ease;
+  }
+  
+  .enhanced-code-block:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  }
+  
+  .code-content {
+    line-height: 1.6;
+  }
+  
+  .copy-button {
+    backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  
+  .copy-button:hover {
+    transform: scale(1.05);
+  }
+  
+  .line-numbers {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: 0.75rem;
+    line-height: 1.6;
+    padding-right: 0.5rem;
+  }
+  
+  /* 语法高亮增强 */
+  .language-javascript code,
+  .language-js code {
+    color: #e6db74;
+  }
+  
+  .language-css code {
+    color: #66d9ef;
+  }
+  
+  .language-html code {
+    color: #f92672;
+  }
+</style>

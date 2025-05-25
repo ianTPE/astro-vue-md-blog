@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import BlogCard from '../../components/local/blog/BlogCard.astro';
+
+// 获取所有博客文章
+const posts = await Astro.glob('./posts/*/content.mdx');
+
+// 按日期排序 (最新的在前)
+const sortedPosts = posts.sort((a, b) => 
+  new Date(b.frontmatter.date) - new Date(a.frontmatter.date)
+).map(post => {
+  // 从路径中提取 slug
+  const pathParts = post.file.split('/');
+  const slug = pathParts[pathParts.length - 2]; // 获取文件夹名作为 slug
+  return {
+    ...post,
+    slug,
+    url: `/blog/${slug}`
+  };
+});
+---
+
+<Layout>
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <!-- 博客标题 -->
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">我的博客</h1>
+      <p class="text-xl text-gray-600">分享技术、生活和思考</p>
+    </header>
+
+    <!-- 博客文章网格 -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {sortedPosts.map((post) => (
+        <BlogCard 
+          title={post.frontmatter.title}
+          description={post.frontmatter.description}
+          date={post.frontmatter.date}
+          tags={post.frontmatter.tags}
+          url={post.url}
+          image={post.frontmatter.image}
+        />
+      ))}
+    </div>
+
+    <!-- 如果没有文章 -->
+    {sortedPosts.length === 0 && (
+      <div class="text-center py-16">
+        <h2 class="text-2xl font-semibold text-gray-500 mb-4">还没有博客文章</h2>
+        <p class="text-gray-400">快去 <code class="bg-gray-100 px-2 py-1 rounded">src/pages/blog/posts/</code> 目录添加您的第一篇文章吧！</p>
+      </div>
+    )}
+  </div>
+</Layout>

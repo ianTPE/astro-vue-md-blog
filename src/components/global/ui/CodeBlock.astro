@@ -1,0 +1,56 @@
+---
+export interface Props {
+  language?: string;
+  title?: string;
+  showLineNumbers?: boolean;
+}
+
+const { language = 'text', title, showLineNumbers = false } = Astro.props;
+---
+
+<div class="code-block bg-gray-900 rounded-lg overflow-hidden my-6">
+  {title && (
+    <div class="bg-gray-800 px-4 py-2 text-gray-300 text-sm font-medium border-b border-gray-700">
+      {title}
+    </div>
+  )}
+  
+  <div class="relative">
+    <!-- 复制按钮 -->
+    <button 
+      class="absolute top-2 right-2 bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-1 rounded text-xs transition-colors"
+      onclick="copyCode(this)"
+    >
+      复制
+    </button>
+    
+    <pre class={`p-4 overflow-x-auto text-sm ${showLineNumbers ? 'pl-12' : ''}`}><code class={`language-${language} text-gray-100`}><slot /></code></pre>
+  </div>
+</div>
+
+<script>
+  function copyCode(button) {
+    const codeBlock = button.parentElement.querySelector('code');
+    const text = codeBlock.textContent;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      const originalText = button.textContent;
+      button.textContent = '已复制!';
+      button.className = button.className.replace('bg-gray-700', 'bg-green-600');
+      
+      setTimeout(() => {
+        button.textContent = originalText;
+        button.className = button.className.replace('bg-green-600', 'bg-gray-700');
+      }, 2000);
+    });
+  }
+  
+  // 将函数添加到全局作用域
+  window.copyCode = copyCode;
+</script>
+
+<style>
+  .code-block code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+  }
+</style>

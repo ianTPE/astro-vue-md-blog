@@ -1,0 +1,72 @@
+---
+title: "文章标题"
+description: "文章描述，简要介绍文章的主要内容"
+date: "2025-05-25"  # 请更新为实际发布日期
+tags: ["标签1", "标签2", "标签3"]  # 添加相关标签
+author: "作者名"
+image: "/images/article-cover.jpg"  # 可选：文章封面图片
+---
+
+import Alert from '../../../../components/global/ui/Alert.astro';
+import CodeBlock from '../../../../components/global/ui/CodeBlock.astro';
+
+// 导入本文章专用的本地组件（如需要）
+// import MyCustomComponent from './components/MyCustomComponent.astro';
+
+# 文章标题
+
+简要介绍文章的背景和要解决的问题。
+
+<Alert type="info" title="提示">
+  这是一个信息提示框，您可以用它来突出重要信息。
+</Alert>
+
+## 主要内容
+
+### 小节标题
+
+文章的主要内容...
+
+#### 代码示例
+
+<CodeBlock language="javascript" title="示例代码">
+function example() {
+  console.log('Hello, World!');
+}
+
+example();
+</CodeBlock>
+
+#### 列表示例
+
+- 要点 1
+- 要点 2
+- 要点 3
+
+### 另一个小节
+
+更多内容...
+
+<Alert type="success" title="成功">
+  成功完成某个步骤的提示。
+</Alert>
+
+## 总结
+
+总结文章的主要观点和收获：
+
+1. 第一个要点
+2. 第二个要点
+3. 第三个要点
+
+<Alert type="warning" title="注意">
+  需要注意的事项或警告。
+</Alert>
+
+---
+
+**相关链接：**
+- [链接1](https://example.com)
+- [链接2](https://example.com)
+
+感谢阅读！如果您有任何问题，欢迎在评论区讨论。

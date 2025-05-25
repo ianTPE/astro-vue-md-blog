@@ -1,11 +1,160 @@
 ---
-import Welcome from '../components/Welcome.astro';
 import Layout from '../layouts/Layout.astro';
+import BlogCard from '../components/local/blog/BlogCard.astro';
+import Alert from '../components/global/ui/Alert.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+// 获取最新的几篇博客文章
+const posts = await Astro.glob('./blog/posts/*/content.mdx');
+const latestPosts = posts
+  .sort((a, b) => new Date(b.frontmatter.date) - new Date(a.frontmatter.date))
+  .slice(0, 3)
+  .map(post => {
+    // 从路径中提取 slug
+    const pathParts = post.file.split('/');
+    const slug = pathParts[pathParts.length - 2]; // 获取文件夹名作为 slug
+    return {
+      ...post,
+      slug,
+      url: `/blog/${slug}`
+    };
+  });
 ---
 
 <Layout>
-	<Welcome />
+  <div class="bg-white">
+    <!-- 首页横幅 -->
+    <section class="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-20">
+      <div class="max-w-6xl mx-auto px-4 text-center">
+        <h1 class="text-5xl font-bold mb-6">
+          欢迎来到我的博客 ✨
+        </h1>
+        <p class="text-xl mb-8 opacity-90">
+          分享 Astro、Vue.js 和现代前端开发的技术文章
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/blog" 
+            class="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors"
+          >
+            📖 浏览博客
+          </a>
+          <a 
+            href="/components" 
+            class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition-colors"
+          >
+            🧩 查看组件
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 技术栈介绍 -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+          技术栈
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center p-6 bg-white rounded-lg shadow-sm">
+            <div class="text-4xl mb-4">🚀</div>
+            <h3 class="text-xl font-semibold mb-2">Astro</h3>
+            <p class="text-gray-600">
+              现代静态站点生成器，零配置、高性能、支持多框架
+            </p>
+          </div>
+          <div class="text-center p-6 bg-white rounded-lg shadow-sm">
+            <div class="text-4xl mb-4">💚</div>
+            <h3 class="text-xl font-semibold mb-2">Vue.js</h3>
+            <p class="text-gray-600">
+              渐进式框架，提供响应式组件和优秀的开发体验
+            </p>
+          </div>
+          <div class="text-center p-6 bg-white rounded-lg shadow-sm">
+            <div class="text-4xl mb-4">🎨</div>
+            <h3 class="text-xl font-semibold mb-2">Tailwind CSS</h3>
+            <p class="text-gray-600">
+              实用优先的 CSS 框架，快速构建现代化界面
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 最新文章 -->
+    <section class="py-16">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="flex justify-between items-center mb-12">
+          <h2 class="text-3xl font-bold text-gray-900">
+            最新文章
+          </h2>
+          <a 
+            href="/blog" 
+            class="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+          >
+            查看全部 →
+          </a>
+        </div>
+        
+        {latestPosts.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {latestPosts.map((post) => (
+              <BlogCard 
+                title={post.frontmatter.title}
+                description={post.frontmatter.description}
+                date={post.frontmatter.date}
+                tags={post.frontmatter.tags}
+                url={post.url}
+                image={post.frontmatter.image}
+              />
+            ))}
+          </div>
+        ) : (
+          <div class="text-center py-12">
+            <Alert type="info" title="暂无文章">
+              还没有发布任何文章，快去 <code>src/pages/blog/posts/</code> 目录添加您的第一篇文章吧！
+            </Alert>
+          </div>
+        )}
+      </div>
+    </section>
+
+    <!-- 功能特点 -->
+    <section class="py-16 bg-gray-50">
+      <div class="max-w-6xl mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center text-gray-900 mb-12">
+          功能特点
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="text-center">
+            <div class="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl">📝</span>
+            </div>
+            <h3 class="font-semibold mb-2">MDX 支持</h3>
+            <p class="text-gray-600 text-sm">在 Markdown 中使用组件</p>
+          </div>
+          <div class="text-center">
+            <div class="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl">⚡</span>
+            </div>
+            <h3 class="font-semibold mb-2">快速加载</h3>
+            <p class="text-gray-600 text-sm">优化的静态生成</p>
+          </div>
+          <div class="text-center">
+            <div class="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl">🎯</span>
+            </div>
+            <h3 class="font-semibold mb-2">响应式设计</h3>
+            <p class="text-gray-600 text-sm">适配所有设备</p>
+          </div>
+          <div class="text-center">
+            <div class="bg-yellow-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span class="text-2xl">🧩</span>
+            </div>
+            <h3 class="font-semibold mb-2">组件库</h3>
+            <p class="text-gray-600 text-sm">丰富的可复用组件</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </Layout>

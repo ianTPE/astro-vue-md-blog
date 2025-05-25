@@ -1,0 +1,69 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+  date: string;
+  tags?: string[];
+  url: string;
+  image?: string;
+}
+
+const { title, description, date, tags = [], url, image } = Astro.props;
+
+// 格式化日期
+const formatDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('zh-CN', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+---
+
+<article class="bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden">
+  <!-- 文章图片 -->
+  {image && (
+    <div class="aspect-video overflow-hidden">
+      <img 
+        src={image} 
+        alt={title} 
+        class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+      />
+    </div>
+  )}
+  
+  <!-- 文章内容 -->
+  <div class="p-6">
+    <!-- 标题 -->
+    <h2 class="text-xl font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
+      <a href={url}>{title}</a>
+    </h2>
+    
+    <!-- 描述 -->
+    {description && (
+      <p class="text-gray-600 mb-4 line-clamp-3">{description}</p>
+    )}
+    
+    <!-- 标签 -->
+    {tags.length > 0 && (
+      <div class="flex flex-wrap gap-2 mb-4">
+        {tags.map((tag) => (
+          <span class="bg-blue-100 text-blue-800 text-sm px-2 py-1 rounded-full">
+            #{tag}
+          </span>
+        ))}
+      </div>
+    )}
+    
+    <!-- 日期和阅读链接 -->
+    <div class="flex justify-between items-center text-sm text-gray-500">
+      <time datetime={date}>{formatDate(date)}</time>
+      <a 
+        href={url} 
+        class="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+      >
+        阅读更多 →
+      </a>
+    </div>
+  </div>
+</article>

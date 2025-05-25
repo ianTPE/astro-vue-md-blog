@@ -1,18 +1,23 @@
 ---
 import '../styles/global.css';
+import Navigation from '../components/global/layout/Navigation.astro';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
+		<title>我的博客 - Astro + Vue.js</title>
+		<meta name="description" content="使用 Astro 和 Vue.js 构建的现代博客" />
 	</head>
-	<body>
-		<slot />
+	<body class="min-h-screen bg-gray-50">
+		<Navigation />
+		<main>
+			<slot />
+		</main>
 	</body>
 </html>
 

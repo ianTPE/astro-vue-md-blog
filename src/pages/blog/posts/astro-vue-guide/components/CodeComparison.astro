@@ -1,0 +1,51 @@
+---
+// Astro Vue 指南专用的代码对比组件
+export interface Props {
+  title?: string;
+  beforeTitle?: string;
+  afterTitle?: string;
+}
+
+const { 
+  title = "代码对比", 
+  beforeTitle = "之前", 
+  afterTitle = "之后" 
+} = Astro.props;
+---
+
+<div class="code-comparison bg-white border rounded-lg overflow-hidden shadow-sm">
+  {title && (
+    <div class="bg-gray-50 px-4 py-2 border-b">
+      <h4 class="font-semibold text-gray-800">{title}</h4>
+    </div>
+  )}
+  
+  <div class="grid grid-cols-1 md:grid-cols-2">
+    <!-- Before -->
+    <div class="border-r border-gray-200">
+      <div class="bg-red-50 px-4 py-2 text-red-700 font-medium text-sm border-b border-red-200">
+        ❌ {beforeTitle}
+      </div>
+      <div class="p-4">
+        <pre class="text-sm text-gray-800 overflow-x-auto"><code><slot name="before" /></code></pre>
+      </div>
+    </div>
+    
+    <!-- After -->
+    <div>
+      <div class="bg-green-50 px-4 py-2 text-green-700 font-medium text-sm border-b border-green-200">
+        ✅ {afterTitle}
+      </div>
+      <div class="p-4">
+        <pre class="text-sm text-gray-800 overflow-x-auto"><code><slot name="after" /></code></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .code-comparison code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+    line-height: 1.5;
+  }
+</style>
