@@ -1,7 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import Alert from '../../components/global/ui/Alert.astro';
-import CodeBlock from '../../components/global/ui/CodeBlock.astro';
 import VueCounter from '../../components/global/common/VueCounter.vue';
 ---
 
@@ -9,7 +8,7 @@ import VueCounter from '../../components/global/common/VueCounter.vue';
   <div class="max-w-6xl mx-auto px-4 py-8">
     <!-- 页面标题 -->
     <header class="text-center mb-12">
-      <h1 class="text-4xl font-bold text-gray-900 mb-4">组件库</h1>
+      <h1 class="text-4xl font-bold text-gray-900 mb-4">🧩 组件库</h1>
       <p class="text-xl text-gray-600">展示项目中可用的所有组件</p>
     </header>
 
@@ -18,11 +17,12 @@ import VueCounter from '../../components/global/common/VueCounter.vue';
       
       <!-- UI 组件 -->
       <section>
-        <h2 class="text-3xl font-bold text-gray-900 mb-8">UI 组件</h2>
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">🎨 UI 组件</h2>
         
         <!-- Alert 组件 -->
         <div class="mb-12">
           <h3 class="text-2xl font-semibold text-gray-800 mb-4">Alert 提示框</h3>
+          
           <div class="space-y-4 mb-6">
             <Alert type="info" title="信息提示">
               这是一个信息提示框，用于显示一般性的信息。
@@ -39,68 +39,18 @@ import VueCounter from '../../components/global/common/VueCounter.vue';
             <Alert type="error" title="错误提示">
               发生错误！这是一个错误提示框。
             </Alert>
-            
-            <Alert type="info" title="可关闭的提示" dismissible>
-              这是一个可以关闭的提示框，点击右上角的 × 可以关闭。
-            </Alert>
           </div>
-          
-          <CodeBlock language="astro" title="使用示例">
-&lt;Alert type="info" title="提示标题"&gt;
-  提示内容
-&lt;/Alert&gt;
-
-&lt;Alert type="success" title="成功" dismissible&gt;
-  可关闭的成功提示
-&lt;/Alert&gt;
-          </CodeBlock>
-        </div>
-
-        <!-- CodeBlock 组件 -->
-        <div class="mb-12">
-          <h3 class="text-2xl font-semibold text-gray-800 mb-4">CodeBlock 代码块</h3>
-          <div class="mb-6">
-            <CodeBlock language="javascript" title="JavaScript 示例">
-function hello(name) {
-  console.log(`Hello, ${name}!`);
-}
-
-hello('World');
-            </CodeBlock>
-            
-            <CodeBlock language="css" title="CSS 样式">
-.button {
-  background: linear-gradient(45deg, #007bff, #0056b3);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-            </CodeBlock>
-          </div>
-          
-          <CodeBlock language="astro" title="使用示例">
-&lt;CodeBlock language="javascript" title="代码标题"&gt;
-  // 您的代码
-&lt;/CodeBlock&gt;
-          </CodeBlock>
         </div>
       </section>
 
       <!-- Vue 组件 -->
       <section>
-        <h2 class="text-3xl font-bold text-gray-900 mb-8">Vue 组件</h2>
+        <h2 class="text-3xl font-bold text-gray-900 mb-8">💚 Vue 组件</h2>
         
         <!-- VueCounter 组件 -->
         <div class="mb-12">
           <h3 class="text-2xl font-semibold text-gray-800 mb-4">VueCounter 计数器</h3>
+          
           <div class="mb-6">
             <VueCounter 
               client:load 
@@ -108,100 +58,44 @@ hello('World');
               message="这是一个 Vue 组件示例，具有响应式状态管理。"
             />
           </div>
-          
-          <CodeBlock language="astro" title="使用示例">
-&lt;VueCounter 
-  client:load 
-  title="计数器标题" 
-  message="描述文字"
-/&gt;
-          </CodeBlock>
-        </div>
-      </section>
-
-      <!-- 布局组件 -->
-      <section>
-        <h2 class="text-3xl font-bold text-gray-900 mb-8">布局组件</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div class="bg-gray-50 p-6 rounded-lg">
-            <h3 class="text-xl font-semibold mb-3">BlogLayout</h3>
-            <p class="text-gray-600 mb-4">
-              博客文章的布局组件，包含标题、元信息、内容区域等。
-            </p>
-            <CodeBlock language="astro">
-&lt;BlogLayout 
-  title="文章标题"
-  date="2025-05-25"
-  tags={["标签1", "标签2"]}
-&gt;
-  文章内容
-&lt;/BlogLayout&gt;
-            </CodeBlock>
-          </div>
-          
-          <div class="bg-gray-50 p-6 rounded-lg">
-            <h3 class="text-xl font-semibold mb-3">BlogCard</h3>
-            <p class="text-gray-600 mb-4">
-              博客文章卡片组件，用于文章列表展示。
-            </p>
-            <CodeBlock language="astro">
-&lt;BlogCard 
-  title="文章标题"
-  description="文章描述"
-  date="2025-05-25"
-  url="/blog/article"
-/&gt;
-            </CodeBlock>
-          </div>
         </div>
       </section>
 
       <!-- 使用指南 -->
       <section class="bg-blue-50 p-8 rounded-lg">
-        <h2 class="text-3xl font-bold text-gray-900 mb-6">使用指南</h2>
+        <h2 class="text-3xl font-bold text-gray-900 mb-6">📚 使用指南</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <div>
             <h3 class="text-xl font-semibold mb-3">在 MDX 中使用</h3>
-            <CodeBlock language="mdx">
----
-title: "我的文章"
----
-
+            <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto">
 import Alert from '../components/ui/Alert.astro';
-import VueCounter from '../components/VueCounter.vue';
-
-# 文章标题
 
 &lt;Alert type="info"&gt;
   这是在 MDX 中使用的组件
 &lt;/Alert&gt;
-
-&lt;VueCounter client:load /&gt;
-            </CodeBlock>
+            </pre>
           </div>
           
           <div>
             <h3 class="text-xl font-semibold mb-3">在 Astro 中使用</h3>
-            <CodeBlock language="astro">
+            <pre class="bg-gray-100 p-4 rounded text-sm overflow-x-auto">
 ---
 import Alert from '../components/ui/Alert.astro';
-import VueCounter from '../components/VueCounter.vue';
 ---
 
 &lt;Alert type="success"&gt;
   组件导入成功
 &lt;/Alert&gt;
-
-&lt;VueCounter client:load /&gt;
-            </CodeBlock>
+            </pre>
           </div>
         </div>
         
-        <Alert type="info" title="客户端指令">
-          Vue 组件需要使用客户端指令（如 <code>client:load</code>）来启用交互功能。
-        </Alert>
+        <div class="mt-6">
+          <Alert type="info" title="客户端指令">
+            Vue 组件需要使用客户端指令（如 client:load）来启用交互功能。
+          </Alert>
+        </div>
       </section>
     </div>
   </div>

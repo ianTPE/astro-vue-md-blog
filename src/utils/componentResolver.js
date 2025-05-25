@@ -47,15 +47,14 @@ export class ComponentResolver {
     if (this.articleSlug) {
       const articleComponentsDir = path.join(
         this.basePath, 
-        'src/pages/blog/posts', 
-        this.articleSlug, 
-        'components'
+        'src/components/articles', 
+        this.articleSlug
       );
       
       for (const ext of extensions) {
         const fileName = `${componentName}${ext}`;
         const fullPath = path.join(articleComponentsDir, fileName);
-        const importPath = `./components/${fileName}`;
+        const importPath = `../../../../components/articles/${this.articleSlug}/${fileName}`;
         
         paths.push({
           fullPath,
@@ -138,7 +137,7 @@ export class ComponentResolver {
     const scanDirs = [
       // Article-level
       ...(this.articleSlug ? [
-        path.join(this.basePath, 'src/pages/blog/posts', this.articleSlug, 'components')
+        path.join(this.basePath, 'src/components/articles', this.articleSlug)
       ] : []),
       // Page-level
       path.join(this.basePath, 'src/components/local/blog'),
@@ -152,7 +151,7 @@ export class ComponentResolver {
       if (fs.existsSync(dir)) {
         const files = fs.readdirSync(dir);
         for (const file of files) {
-          const match = file.match(/^(.+)\.(astro|vue|jsx|tsx)$/);
+          const match = file.match(/^_?(.+)\.(astro|vue|jsx|tsx)$/);
           if (match) {
             const componentName = match[1];
             const level = this.getComponentLevel(dir);
@@ -162,7 +161,8 @@ export class ComponentResolver {
               components.set(componentName, {
                 name: componentName,
                 level,
-                path: path.join(dir, file)
+                path: path.join(dir, file),
+                actualFileName: file // 保存实际文件名（包括下划线前缀）
               });
             }
           }
@@ -177,9 +177,9 @@ export class ComponentResolver {
    * 根据目录路径确定组件级别
    */
   getComponentLevel(dirPath) {
-    if (dirPath.includes('/posts/') && dirPath.includes('/components')) {
+    if (dirPath.includes('/components/articles/')) {
       return 'article';
-    } else if (dirPath.includes('/local/')) {
+    } else if (dirPath.includes('/components/local/')) {
       return 'page';
     } else {
       return 'global';

@@ -7,13 +7,10 @@ author: "博主"
 image: "/images/welcome.jpg"
 ---
 
-import { VueCounter } from '../../../../components/global/common/VueCounter.vue';
-// import Alert from '../../../../components/global/ui/Alert.astro';  // 🌐 全局组件
-
-// 导入本文章专用的本地组件 (优先级高于全局组件)
-import Alert from './components/Alert.astro';                   // 📍 文章级组件
-import WelcomeFeatureCard from './components/WelcomeFeatureCard.astro';
-import WelcomeStats from './components/WelcomeStats.vue';
+import VueCounter from '../../../../components/global/common/VueCounter.vue';
+import Alert from '../../../../components/articles/welcome/Alert.astro';
+import WelcomeFeatureCard from '../../../../components/articles/welcome/WelcomeFeatureCard.astro';
+import WelcomeStats from '../../../../components/articles/welcome/WelcomeStats.vue';
 
 # 欢迎来到我的博客！
 
@@ -61,13 +58,9 @@ import WelcomeStats from './components/WelcomeStats.vue';
 
 <Alert type="info" title="优先级规则">
   **组件解析优先级：**
-  1. 📍 **Article-level**: `posts/{slug}/components/` (最高优先级)
-  2. 📝 **Page-level**: `components/local/blog/` (中等优先级) 
-  3. 🌐 **Global**: `components/global/ui/` (最低优先级)
-</Alert>
-
-<Alert type="success" title="实际效果">
-  如果您在其他文章中使用 Alert 组件，将会显示全局版本的样式。而在这篇 Welcome 文章中，使用的是定制版本！
+  1. 📍 **Article-level**: 文章级组件 (最高优先级)
+  2. 📝 **Page-level**: 页面级组件 (中等优先级) 
+  3. 🌐 **Global**: 全局组件 (最低优先级)
 </Alert>
 
 ## 组件展示
@@ -99,38 +92,6 @@ function greet(name) {
 greet('World');
 ```
 
-```css
-/* CSS 样式示例 */
-.button {
-  @apply bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600;
-}
-```
-
-## 博客目录结构
-
-这个博客的目录结构设计如下：
-
-```
-src/
-├── pages/
-│   ├── blog/
-│   │   ├── index.astro          # 博客列表页
-│   │   ├── [slug].astro         # 博客详情页
-│   │   └── posts/               # 博客文章
-│   └── components/              # 组件展示页
-├── components/
-│   ├── blog/                    # 博客相关组件
-│   ├── ui/                      # UI 组件
-│   ├── layout/                  # 布局组件
-│   └── common/                  # 通用组件
-└── layouts/                     # 页面布局
-```
-
-## 接下来的计划
-
-1. 添加更多的 UI 组件
-2. 完善博客功能
-3. 添加搜索功能
-4. 优化 SEO
+## 总结
 
 感谢您的阅读，期待与您分享更多精彩内容！

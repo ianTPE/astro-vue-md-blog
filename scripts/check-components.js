@@ -161,6 +161,7 @@ function showPriority(slug) {
 // 扫描所有文章
 function scanAllArticles() {
   const postsDir = path.join(process.cwd(), 'src/pages/blog/posts');
+  const articlesDir = path.join(process.cwd(), 'src/components/articles');
   
   if (!fs.existsSync(postsDir)) {
     colorLog('red', '❌ 博客文章目录不存在');
@@ -180,10 +181,15 @@ function scanAllArticles() {
     const resolver = new ComponentResolver(slug);
     const components = resolver.getAvailableComponents();
     const conflicts = checkComponentConflicts(slug);
+    
+    // 检查文章组件目录是否存在
+    const articleComponentsPath = path.join(articlesDir, slug);
+    const hasArticleComponents = fs.existsSync(articleComponentsPath);
 
     colorLog('blue', `📄 ${slug}:`);
     console.log(`   组件数量: ${components.length}`);
     console.log(`   冲突数量: ${conflicts.length}`);
+    console.log(`   文章组件: ${hasArticleComponents ? '✅ 存在' : '❌ 不存在'}`);
     
     if (conflicts.length > 0) {
       allConflicts.push({ slug, conflicts });

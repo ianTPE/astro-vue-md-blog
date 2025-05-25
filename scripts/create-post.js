@@ -19,55 +19,91 @@ const slug = articleName
   .replace(/^-+|-+$/g, '');
 
 const templateDir = path.join(__dirname, '..', 'templates', 'blog-post');
-const targetDir = path.join(__dirname, '..', 'src', 'pages', 'blog', 'posts', slug);
+const articleContentDir = path.join(__dirname, '..', 'src', 'pages', 'blog', 'posts', slug);
+const articleComponentsDir = path.join(__dirname, '..', 'src', 'components', 'articles', slug);
 
 // 检查目标目录是否已存在
-if (fs.existsSync(targetDir)) {
+if (fs.existsSync(articleContentDir) || fs.existsSync(articleComponentsDir)) {
   console.error(`❌ 文章 "${slug}" 已存在`);
   process.exit(1);
 }
 
-// 复制模板文件
-function copyDirectory(src, dest) {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest, { recursive: true });
+// 复制文章内容
+function createArticleContent() {
+  // 创建文章内容目录
+  fs.mkdirSync(articleContentDir, { recursive: true });
+  
+  // 复制并修改 content.mdx
+  const templateContentPath = path.join(templateDir, 'content.mdx');
+  const targetContentPath = path.join(articleContentDir, 'content.mdx');
+  
+  let content = fs.readFileSync(templateContentPath, 'utf8');
+  const today = new Date().toISOString().split('T')[0];
+  
+  content = content
+    .replace('title: "文章标题"', `title: "${articleName}"`)
+    .replace('date: "2025-05-25"', `date: "${today}"`)
+    .replace('my-article', slug);
+  
+  fs.writeFileSync(targetContentPath, content);
+}
+
+// 复制文章组件
+function createArticleComponents() {
+  // 创建文章组件目录
+  fs.mkdirSync(articleComponentsDir, { recursive: true });
+  
+  // 复制示例组件
+  const astroComponentSource = path.join(templateDir, 'ExampleComponent.astro');
+  const vueComponentSource = path.join(templateDir, 'ExampleVueComponent.vue');
+  
+  const astroComponentTarget = path.join(articleComponentsDir, 'ExampleComponent.astro');
+  const vueComponentTarget = path.join(articleComponentsDir, 'ExampleVueComponent.vue');
+  
+  if (fs.existsSync(astroComponentSource)) {
+    fs.copyFileSync(astroComponentSource, astroComponentTarget);
   }
   
-  const items = fs.readdirSync(src);
-  
-  for (const item of items) {
-    const srcPath = path.join(src, item);
-    const destPath = path.join(dest, item);
-    
-    if (fs.statSync(srcPath).isDirectory()) {
-      copyDirectory(srcPath, destPath);
-    } else {
-      let content = fs.readFileSync(srcPath, 'utf8');
-      
-      // 如果是 content.mdx，更新模板内容
-      if (item === 'content.mdx') {
-        const today = new Date().toISOString().split('T')[0];
-        content = content
-          .replace('title: "文章标题"', `title: "${articleName}"`)
-          .replace('date: "2025-05-25"', `date: "${today}"`);
-      }
-      
-      fs.writeFileSync(destPath, content);
-    }
+  if (fs.existsSync(vueComponentSource)) {
+    fs.copyFileSync(vueComponentSource, vueComponentTarget);
   }
+  
+  // 创建组件索引文件
+  const indexContent = `// ${articleName} 文章专用组件
+// 优先级: Article-level > Page-level > Global
+
+export { default as ExampleComponent } from './ExampleComponent.astro';
+export { default as ExampleVueComponent } from './ExampleVueComponent.vue';
+
+// 在文章中使用示例：
+// import ExampleComponent from '../../../../components/articles/${slug}/ExampleComponent.astro';
+// import ExampleVueComponent from '../../../../components/articles/${slug}/ExampleVueComponent.vue';
+`;
+  
+  fs.writeFileSync(path.join(articleComponentsDir, 'index.js'), indexContent);
 }
 
 try {
-  copyDirectory(templateDir, targetDir);
+  createArticleContent();
+  createArticleComponents();
   
   console.log('✅ 文章创建成功！');
-  console.log(`📁 文章目录：${targetDir}`);
+  console.log('');
+  console.log('📁 创建的文件：');
+  console.log(`   📄 内容文件：${articleContentDir}/content.mdx`);
+  console.log(`   🧩 组件目录：${articleComponentsDir}/`);
+  console.log('');
   console.log(`🌐 访问路径：http://localhost:4321/blog/${slug}`);
   console.log('');
   console.log('📝 下一步：');
-  console.log(`1. 编辑文章：${path.join(targetDir, 'content.mdx')}`);
-  console.log(`2. 添加组件：${path.join(targetDir, 'components')}`);
+  console.log(`1. 编辑文章内容：${path.join(articleContentDir, 'content.mdx')}`);
+  console.log(`2. 自定义组件：${articleComponentsDir}/`);
   console.log('3. 启动开发服务器：npm run dev');
+  console.log('');
+  console.log('🎯 组件优先级：');
+  console.log(`   📍 文章级: src/components/articles/${slug}/`);
+  console.log('   📝 页面级: src/components/local/blog/');
+  console.log('   🌐 全局级: src/components/global/ui/');
   
 } catch (error) {
   console.error('❌ 创建文章失败：', error.message);
