@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import Navigation from '../components/global/layout/Navigation.astro';
+import Footer from '../components/global/layout/Footer.astro';
 ---
 
 <!doctype html>
@@ -15,9 +16,10 @@ import Navigation from '../components/global/layout/Navigation.astro';
 	</head>
 	<body class="min-h-screen bg-gray-50">
 		<Navigation />
-		<main>
+		<main class="flex-grow">
 			<slot />
 		</main>
+    <Footer />
 	</body>
 </html>
 
