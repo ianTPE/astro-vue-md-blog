@@ -1,0 +1,7 @@
+{
+  "name": "astro-vue-md-blog",
+  "compatibility_date": "2025-05-25",
+  "assets": {
+    "directory": "./dist"
+  }
+}
